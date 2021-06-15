@@ -36,6 +36,11 @@ android {
 }
 
 dependencies {
+    implementation(project(Modules.api))
+    implementation(project(Modules.impl))
+
+    implementation(Depends.coroutines)
+    implementation(Depends.fragment)
 
     implementation("androidx.core:core-ktx:1.5.0")
     implementation("androidx.appcompat:appcompat:1.3.0")

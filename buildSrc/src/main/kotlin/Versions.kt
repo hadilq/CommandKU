@@ -16,5 +16,6 @@
 object Versions {
     const val kotlin = "1.5.10"
     const val coroutines = "1.5.0"
+    const val fragment = "1.3.2"
     const val junitJupiter = "5.7.1"
 }
