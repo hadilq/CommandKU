@@ -17,16 +17,39 @@ package com.github.hadilq.messageku.api
 
 import kotlin.reflect.KClass
 
+/**
+ * A [Command] is a base interface for any reactive packages, which can be a request
+ * or a result.
+ */
 interface Command
 
+/**
+ * A wrapper for [Command], which is useful while trying to request and the no callback
+ * registered to receive it.
+ */
 sealed class CommandResult<C : Command>
+
+/**
+ * A callback is available/registered and the result command is [command].
+ */
 class Available<C : Command>(val command: C) : CommandResult<C>()
+
+/**
+ * No callback is available/registered.
+ */
 class NotAvailable<C : Command> : CommandResult<C>()
 
-inline class CommandKey(
+/**
+ * They key to match up requests and results.
+ */
+@JvmInline
+value class CommandKey(
   val key: Long,
 )
 
+/**
+ * Keep the request [command] next to its [key].
+ */
 class CommandBall<C : Command>(
   val key: CommandKey,
   val command: C,
@@ -42,6 +65,9 @@ class CommandBall<C : Command>(
   }
 }
 
+/**
+ * Keep the result [command] next to its [key].
+ */
 class CommandResultBall<C : Command>(
   val key: CommandKey,
   val command: CommandResult<C>,
@@ -57,10 +83,16 @@ class CommandResultBall<C : Command>(
   }
 }
 
+/**
+ * Callback to receive the requests.
+ */
 interface CommandCallback<C : Command> {
   suspend fun invoke(commandBall: CommandBall<C>)
 }
 
+/**
+ * Callback to receive the result. After receiving one result, it will be disposed.
+ */
 interface CommandResultCallback<C : Command> {
   suspend fun invoke(commandBall: CommandResultBall<C>)
 }

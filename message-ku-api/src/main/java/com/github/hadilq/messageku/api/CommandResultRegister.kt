@@ -17,8 +17,15 @@ package com.github.hadilq.messageku.api
 
 import kotlin.reflect.KClass
 
+/**
+ * Broker for registration to receive the result.
+ */
 interface CommandResultRegister {
 
+  /**
+   * Register to receive the result, which matches [key], in [callback]. After receiving the
+   * result, [callback] will be disposed.
+   */
   fun <C : Command> register(
       commandClass: KClass<C>,
       key: CommandKey,

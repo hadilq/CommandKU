@@ -17,8 +17,19 @@ package com.github.hadilq.messageku.api
 
 import kotlin.reflect.KClass
 
+/**
+ * This is the entrance of this implementation. The main difference between this implementation
+ * and other event-bus/message-queue libraries is that here we took advantage of Kotlin
+ * coroutine to have a request/result pair of messages, but others just sent a message and
+ * response is another message that needs to be match to make sense out of it. Therefore here,
+ * every request has its own result pair, which [CommandExecutor] can match and filter them out.
+ */
 interface CommandExecutor {
 
+  /**
+   * The [input] is the request [Command] and the output is the result [Command] of [execute]
+   * method. [inputClass] is the type of [input] and [expectedOut] is the type of result.
+   */
   suspend fun <IN : Command, OUT : Command> execute(
     input: IN,
     inputClass: KClass<IN>,
@@ -26,6 +37,9 @@ interface CommandExecutor {
   ): CommandResult<OUT>
 }
 
+/**
+ * An extension function to make calling [CommandExecutor.execute] easier.
+ */
 suspend inline
 fun <reified IN : Command, reified OUT : Command> CommandExecutor.exe(
   input: IN

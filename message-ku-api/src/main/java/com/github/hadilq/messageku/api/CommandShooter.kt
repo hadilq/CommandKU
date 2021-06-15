@@ -15,6 +15,9 @@
  */
 package com.github.hadilq.messageku.api
 
+/**
+ * Broker for sending request.
+ */
 interface CommandShooter {
 
   suspend fun <C : Command> shoot(commandBall: CommandBall<C>): Boolean

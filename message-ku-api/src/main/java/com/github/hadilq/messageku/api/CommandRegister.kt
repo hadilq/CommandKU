@@ -17,18 +17,35 @@ package com.github.hadilq.messageku.api
 
 import kotlin.reflect.KClass
 
+/**
+ * Broker for registration to receive requests.
+ */
 interface CommandRegister {
 
+  /**
+   * Register [callback] to receive requests.
+   */
   fun <C : Command> register(
       commandClass: KClass<C>,
       callback: CommandCallback<C>,
   ): Registration
 }
 
+/**
+ * Registration contract.
+ */
 interface Registration {
+
+  /**
+   * Dispose the registration contract.
+   */
   suspend fun dispose()
 }
 
+/**
+ * A handy implementation for [CommandCallback]. It can take care of [CommandBall.key] to be
+ * match with [CommandResultBall.key].
+ */
 class CommandCallbackImpl<IN : Command, OUT : Command>(
     private val commandShooter: CommandResultShooter,
     private val commandResultClass: KClass<OUT>,

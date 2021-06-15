@@ -15,7 +15,13 @@
  */
 package com.github.hadilq.messageku.api
 
+/**
+ * Provide an event to register callbacks, [CommandCallback], to the broker, [CommandRegister].
+ */
 interface CommandHook {
 
+  /**
+   * On event this method will be called.
+   */
   fun hookUp(commandRegister: CommandRegister)
 }

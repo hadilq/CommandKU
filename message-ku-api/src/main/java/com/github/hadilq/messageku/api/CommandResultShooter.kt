@@ -15,7 +15,14 @@
  */
 package com.github.hadilq.messageku.api
 
+/**
+ * Broker for sending back results.
+ */
 interface CommandResultShooter {
 
+  /**
+   * Send back the result to its broker, [CommandResultShooter]. Notice, the
+   * [CommandResultBall.key] must be match to the request key, [CommandBall.key].
+   */
   suspend fun <C : Command> shoot(commandBall: CommandResultBall<C>)
 }
