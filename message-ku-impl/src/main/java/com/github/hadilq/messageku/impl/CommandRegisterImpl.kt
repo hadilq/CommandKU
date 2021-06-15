@@ -32,7 +32,26 @@ import kotlinx.coroutines.sync.withLock
 import kotlin.reflect.KClass
 
 
-class CommandOperation : CommandRegister, CommandResultRegister,
+class CommandRegisterImpl constructor(
+  private val messageKU: MessageKU,
+) : CommandRegister by messageKU
+
+class CommandResultRegisterImpl constructor(
+  private val messageKU: MessageKU,
+) : CommandResultRegister by messageKU
+
+class CommandShooterImpl constructor(
+  private val messageKU: MessageKU,
+) : CommandShooter by messageKU
+
+class CommandResultShooterImpl constructor(
+  private val messageKU: MessageKU,
+) : CommandResultShooter by messageKU
+
+/**
+ * This is the core broker of this library and it's assumed to be a singleton.
+ */
+class MessageKU : CommandRegister, CommandResultRegister,
   CommandShooter, CommandResultShooter {
 
   private val mutex = Mutex()
@@ -148,7 +167,7 @@ private class ResultCmd<C : Command>(
 ) : Cmd()
 
 private class RegistrationImpl<C : Command>(
-  private val disposer: CommandOperation,
+  private val disposer: MessageKU,
   private val callback: CommandCallback<C>,
 ) : Registration {
 

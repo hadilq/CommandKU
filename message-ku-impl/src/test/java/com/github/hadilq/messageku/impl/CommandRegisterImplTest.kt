@@ -29,12 +29,12 @@ import kotlin.test.assertNull
 
 internal class CommandRegisterImplTest {
 
-  private val operation = CommandOperation()
+  private val messageKU = MessageKU()
 
   @Test
   fun `given_a_callback then_shoot_command`() = runBlocking {
-    val commandRegister = CommandRegisterImpl(operation)
-    val commandShooter = CommandShooterImpl(operation)
+    val commandRegister = CommandRegisterImpl(messageKU)
+    val commandShooter = CommandShooterImpl(messageKU)
     val commandBall = CommandBall(CommandKey(Random.nextLong()), FakeCommand())
     val callback = FakeCommandCallback<FakeCommand>()
 
@@ -46,8 +46,8 @@ internal class CommandRegisterImplTest {
 
   @Test
   fun `given_a_callback_register_dispose then_shoot_command`() = runBlocking {
-    val commandRegister = CommandRegisterImpl(operation)
-    val commandShooter = CommandShooterImpl(operation)
+    val commandRegister = CommandRegisterImpl(messageKU)
+    val commandShooter = CommandShooterImpl(messageKU)
     val commandBall = CommandBall(CommandKey(123), FakeCommand())
     val callback = FakeCommandCallback<FakeCommand>()
 
@@ -60,8 +60,8 @@ internal class CommandRegisterImplTest {
 
   @Test
   fun `given_a_callback_register_result then_shoot_command`() = runBlocking {
-    val commandResultRegister = CommandResultRegisterImpl(operation)
-    val commandResultShooter = CommandResultShooterImpl(operation)
+    val commandResultRegister = CommandResultRegisterImpl(messageKU)
+    val commandResultShooter = CommandResultShooterImpl(messageKU)
     val key = Random.nextLong()
     val commandBall = CommandResultBall(CommandKey(key), FakeCommand())
     val callback = FakeCommandResultCallback<FakeCommand>()
@@ -74,8 +74,8 @@ internal class CommandRegisterImplTest {
 
   @Test
   fun `given_a_callback_register_result then_shoot_command_twice`() = runBlocking {
-    val commandResultRegister = CommandResultRegisterImpl(operation)
-    val commandResultShooter = CommandResultShooterImpl(operation)
+    val commandResultRegister = CommandResultRegisterImpl(messageKU)
+    val commandResultShooter = CommandResultShooterImpl(messageKU)
     val key = Random.nextLong()
     val commandBall = CommandResultBall(CommandKey(key), FakeCommand())
     val callback = FakeCommandResultCallback<FakeCommand>()
@@ -93,8 +93,8 @@ internal class CommandRegisterImplTest {
 
   @Test
   fun `given_a_callback_register_result then_shoot_command_with_different_key`() = runBlocking {
-    val commandResultRegister = CommandResultRegisterImpl(operation)
-    val commandResultShooter = CommandResultShooterImpl(operation)
+    val commandResultRegister = CommandResultRegisterImpl(messageKU)
+    val commandResultShooter = CommandResultShooterImpl(messageKU)
     val key1 = Random.nextLong()
     val key2 = key1 + 1
     val commandBall = CommandResultBall(CommandKey(key1), FakeCommand())

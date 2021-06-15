@@ -25,7 +25,8 @@ import com.github.hadilq.messageku.api.CommandResultCallback
 import com.github.hadilq.messageku.api.CommandResultRegister
 import com.github.hadilq.messageku.api.CommandShooter
 import com.github.hadilq.messageku.api.NotAvailable
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -47,7 +48,7 @@ class CommandExecutorImpl constructor(
   ): CommandResult<OUT> = suspendCoroutine { con: Continuation<CommandResult<OUT>> ->
     val newCommandKey = getNewCommandKey()
     commandResultRegister.register(expectedOut, newCommandKey, CommandCallbackImpl(con))
-    runBlocking(con.context) {
+    CoroutineScope(con.context).launch {
       if (!commandShooter.shoot(CommandBall(newCommandKey, input, inputClass))) {
         con.resume(NotAvailable())
       }
