@@ -32,22 +32,6 @@ import kotlinx.coroutines.sync.withLock
 import kotlin.reflect.KClass
 
 
-class CommandRegisterImpl constructor(
-  private val operation: CommandOperation,
-) : CommandRegister by operation
-
-class CommandResultRegisterImpl constructor(
-  private val operation: CommandOperation,
-) : CommandResultRegister by operation
-
-class CommandShooterImpl constructor(
-  private val operation: CommandOperation,
-) : CommandShooter by operation
-
-class CommandResultShooterImpl constructor(
-  private val operation: CommandOperation,
-) : CommandResultShooter by operation
-
 class CommandOperation : CommandRegister, CommandResultRegister,
   CommandShooter, CommandResultShooter {
 
