@@ -26,7 +26,9 @@ import com.github.hadilq.messageku.api.CommandResultRegister
 import com.github.hadilq.messageku.api.CommandResultShooter
 import com.github.hadilq.messageku.api.CommandShooter
 import com.github.hadilq.messageku.api.Registration
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlin.reflect.KClass
 
 
@@ -56,13 +58,40 @@ class CommandOperation : CommandRegister, CommandResultRegister,
   override fun <C : Command> register(
     commandClass: KClass<C>,
     callback: CommandCallback<C>,
+  ): Registration = runBlocking {
+    mutex.withLock { internalRegister(commandClass, callback) }
+  }
+
+  override fun <C : Command> register(
+    commandClass: KClass<C>,
+    key: CommandKey,
+    callback: CommandResultCallback<C>
+  ) = runBlocking {
+    mutex.withLock { internalRegister(commandClass, key, callback) }
+  }
+
+  suspend fun <C : Command> dispose(callback: CommandCallback<C>) {
+    mutex.withLock { internalDispose(callback) }
+  }
+
+  override suspend fun <C : Command> shoot(commandBall: CommandBall<C>): Boolean =
+    mutex.withLock { internalShoot(commandBall) }
+      ?.run { invoke(commandBall); true } ?: false
+
+  override suspend fun <C : Command> shoot(commandBall: CommandResultBall<C>) {
+    mutex.withLock { internalShoot(commandBall) }?.apply { invoke(commandBall) }
+  }
+
+  private fun <C : Command> internalRegister(
+    commandClass: KClass<C>,
+    callback: CommandCallback<C>,
   ): Registration {
     val element = RequestCmd(callback)
     store[commandClass] = store[commandClass]?.apply { add(element) } ?: mutableSetOf(element)
     return RegistrationImpl(this, callback)
   }
 
-  override fun <C : Command> register(
+  private fun <C : Command> internalRegister(
     commandClass: KClass<C>,
     key: CommandKey,
     callback: CommandResultCallback<C>
@@ -71,7 +100,7 @@ class CommandOperation : CommandRegister, CommandResultRegister,
     store[commandClass] = store[commandClass]?.apply { add(element) } ?: mutableSetOf(element)
   }
 
-  suspend fun <C : Command> dispose(callback: CommandCallback<C>) {
+  private fun <C : Command> internalDispose(callback: CommandCallback<C>) {
     store.values.forEach { set ->
       set.firstOrNull { cmd ->
         when (cmd) {
@@ -87,7 +116,7 @@ class CommandOperation : CommandRegister, CommandResultRegister,
     }
   }
 
-  private suspend fun <C : Command> disposeResult(callback: CommandResultCallback<C>) {
+  private fun <C : Command> internalDisposeResult(callback: CommandResultCallback<C>) {
     store.values.forEach { set ->
       set.firstOrNull { cmd ->
         when (cmd) {
@@ -103,27 +132,24 @@ class CommandOperation : CommandRegister, CommandResultRegister,
     }
   }
 
-  @Suppress("UNCHECKED_CAST", "TYPE_INFERENCE_ONLY_INPUT_TYPES_WARNING")
-  override suspend fun <C : Command> shoot(commandBall: CommandBall<C>): Boolean {
-    var found = false
-    store[commandBall.commandClass]?.forEach { cmd ->
-      if (cmd is RequestCmd<*>) {
-        (cmd.callback as CommandCallback<C>).invoke(commandBall)
-        found = true
-      }
-    }
-    return found
-  }
+  @Suppress("UNCHECKED_CAST")
+  private fun <C : Command> internalShoot(
+    commandBall: CommandBall<C>,
+  ): CommandCallback<C>? = store[commandBall.commandClass]?.asSequence()
+    ?.filterIsInstance<RequestCmd<*>>()
+    ?.firstOrNull()
+    ?.let { cmd -> (cmd.callback as CommandCallback<C>) }
 
-  @Suppress("UNCHECKED_CAST", "TYPE_INFERENCE_ONLY_INPUT_TYPES_WARNING")
-  override suspend fun <C : Command> shoot(commandBall: CommandResultBall<C>) {
-    store[commandBall.commandClass]?.forEach { cmd ->
-      if (cmd is ResultCmd<*> && cmd.key == commandBall.key) {
-        (cmd.callback as CommandResultCallback<C>).invoke(commandBall)
-        disposeResult(cmd.callback)
-      }
+  @Suppress("UNCHECKED_CAST")
+  private fun <C : Command> internalShoot(
+    commandBall: CommandResultBall<C>,
+  ): CommandResultCallback<C>? = store[commandBall.commandClass]?.asSequence()
+    ?.filterIsInstance<ResultCmd<*>>()
+    ?.firstOrNull { cmd -> cmd.key == commandBall.key }
+    ?.let { cmd ->
+      internalDisposeResult(cmd.callback)
+      cmd.callback as CommandResultCallback<C>
     }
-  }
 }
 
 private sealed class Cmd
