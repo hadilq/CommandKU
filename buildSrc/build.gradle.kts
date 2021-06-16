@@ -21,3 +21,7 @@ repositories {
     google()
     mavenCentral()
 }
+
+dependencies {
+    implementation("com.android.tools.build:gradle:7.0.0-beta03") // Change it in build.gradle.kts too
+}

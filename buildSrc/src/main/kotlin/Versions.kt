@@ -15,6 +15,11 @@
  */
 object Versions {
     const val kotlin = "1.5.10"
+    const val dokka = "1.4.32"
+
+    const val groupId = "com.github.hadilq"
+    const val libVersion = "0.0.1"
+
     const val coroutines = "1.5.0"
     const val fragment = "1.3.2"
     const val junitJupiter = "5.7.1"
