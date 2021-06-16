@@ -20,7 +20,7 @@ import kotlin.reflect.KClass
 /**
  * This is the entrance of this implementation. The main difference between this implementation
  * and other event-bus/message-queue libraries is that here we took advantage of Kotlin
- * coroutine to have a request/result pair of messages, but others just sent a message and
+ * coroutine to have a request-result pair of messages, but others just sent a message and
  * response is another message that needs to be match to make sense out of it. Therefore here,
  * every request has its own result pair, which [CommandExecutor] can match and filter them out.
  */
