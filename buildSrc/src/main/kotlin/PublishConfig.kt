@@ -79,12 +79,13 @@ fun Project.setupPublication() {
     publishing {
       publications {
         register("maven", MavenPublication::class) {
+          from(components["java"])
           artifact(sourcesJar)
           artifact(javadocJar)
           if (!isSnapshot(version)) {
             signing.sign(this)
           } else {
-            println("Download the SNAPSHOT with: implementation(\"${group}:{artifactId}:${version}\")")
+            println("Download the SNAPSHOT with: implementation(\"${group}:${this@setupPublication.name}:${version}\")")
           }
           pom(mavenPom)
         }

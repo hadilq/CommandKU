@@ -3,5 +3,12 @@
 /workspace.xml
 compiler.xml
 gradle.xml
+jarRepositories.xml
 misc.xml
 vcs.xml
+caches
+libraries
+modules.xml
+workspace.xml
+navEditor.xml
+assetWizardSettings.xml

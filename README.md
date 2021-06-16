@@ -1,3 +1,6 @@
+![Health Check](https://github.com/hadilq/message-ku/workflows/Health%20Check/badge.svg?branch=main)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.hadilq/message-ku-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.hadilq/message-ku-api)
+
 # Message KU
 
 This library is so similar to an event bus or a message queue. The differences are
@@ -50,3 +53,19 @@ val registration = commandRegister.register(RequestCommand::class,
 ```
 
 whenever is needed we can dispose the `registration`.
+
+# Download
+
+Download via gradle
+```groovy
+implementation "com.github.hadilq:message-ku-api:$libVersion"
+implementation "com.github.hadilq:message-ku-impl:$libVersion"
+```
+where you can find the `libVersion` in the [Releases](https://github.com/hadilq/message-ku/releases) page of this repository.
+
+Snapshots of the development version are available in [Sonatype's snapshots repository](https://oss.sonatype.org/content/repositories/snapshots).
+
+Contribution
+---
+Create an issue and suggest your idea and raise your hand if you want to implement it. If it's okay
+please create a pull request. Thank you, you're awesome.
