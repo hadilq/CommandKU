@@ -25,7 +25,7 @@ import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-internal class CommandRegisterImplTest {
+internal class MessageKUTest {
 
   private val messageKU = MessageKU()
 
