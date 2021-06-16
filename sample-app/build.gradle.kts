@@ -8,7 +8,7 @@ android {
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
-        applicationId = "com.github.hadilq.messageku"
+        applicationId = "com.github.hadilq.commandku"
         minSdk = 21
         targetSdk = 30
         versionCode = 1

@@ -1,7 +1,7 @@
 ![Health Check](https://github.com/hadilq/message-ku/workflows/Health%20Check/badge.svg?branch=main)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.hadilq/message-ku-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.hadilq/message-ku-api)
 
-# Message KU
+# CommandKU
 
 This library is so similar to an event bus or a message queue. The differences are
 
@@ -26,11 +26,11 @@ data class ResultCommand(val result: String) : Command
 we want to have a few lines of coroutines code to send the request and receive the result.
 
 ```kotlin
-suspend fun CommandExecutor.runCommand(request: RequestCommand): CommandResult<ResultCommand> =
-  exe(request)
+suspend fun CommandExecutor.runCommand(request: String): CommandResult<ResultCommand> =
+  exe(RequestCommand(request))
 
-launch {
-  when (val result = executor.runCommand(RequestCommand("Are you there?"))) {
+scope.launch {
+  when (val result = executor.runCommand("Are you there?")) {
     is Available<*> -> assert(result.command == ResultCommand("Yes! Of course!"))
   }
 }

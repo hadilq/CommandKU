@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.hadilq.messageku.api
-
-import kotlin.reflect.KClass
+package com.github.hadilq.commandku.api
 
 /**
- * Broker for registration to receive the result.
+ * Broker for sending back results.
  */
-interface CommandResultRegister {
+interface CommandResultShooter {
 
   /**
-   * Register to receive the result, which matches [key], in [callback]. After receiving the
-   * result, [callback] will be disposed.
+   * Send back the result to its broker, [CommandResultShooter]. Notice, the
+   * result key, [CommandBall.key], must be match to the request key, [CommandBall.key].
    */
-  fun <C : Command> register(
-    commandClass: KClass<C>,
-    key: CommandKey,
-    callback: CommandCallback<C>,
-  )
+  suspend fun <C : Command> shootResult(commandBall: CommandBall<C>)
 }

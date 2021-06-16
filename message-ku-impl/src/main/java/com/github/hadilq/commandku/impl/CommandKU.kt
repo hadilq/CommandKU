@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.hadilq.messageku.impl
+package com.github.hadilq.commandku.impl
 
-import com.github.hadilq.messageku.api.Command
-import com.github.hadilq.messageku.api.CommandBall
-import com.github.hadilq.messageku.api.CommandCallback
-import com.github.hadilq.messageku.api.CommandKey
-import com.github.hadilq.messageku.api.CommandRegister
-import com.github.hadilq.messageku.api.CommandResultRegister
-import com.github.hadilq.messageku.api.CommandResultShooter
-import com.github.hadilq.messageku.api.CommandShooter
-import com.github.hadilq.messageku.api.Registration
+import com.github.hadilq.commandku.api.Command
+import com.github.hadilq.commandku.api.CommandBall
+import com.github.hadilq.commandku.api.CommandCallback
+import com.github.hadilq.commandku.api.CommandKey
+import com.github.hadilq.commandku.api.CommandRegister
+import com.github.hadilq.commandku.api.CommandResultRegister
+import com.github.hadilq.commandku.api.CommandResultShooter
+import com.github.hadilq.commandku.api.CommandShooter
+import com.github.hadilq.commandku.api.Registration
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -31,25 +31,25 @@ import kotlin.reflect.KClass
 
 
 class CommandRegisterImpl constructor(
-  private val messageKU: MessageKU,
-) : CommandRegister by messageKU
+  private val commandKU: CommandKU,
+) : CommandRegister by commandKU
 
 class CommandResultRegisterImpl constructor(
-  private val messageKU: MessageKU,
-) : CommandResultRegister by messageKU
+  private val commandKU: CommandKU,
+) : CommandResultRegister by commandKU
 
 class CommandShooterImpl constructor(
-  private val messageKU: MessageKU,
-) : CommandShooter by messageKU
+  private val commandKU: CommandKU,
+) : CommandShooter by commandKU
 
 class CommandResultShooterImpl constructor(
-  private val messageKU: MessageKU,
-) : CommandResultShooter by messageKU
+  private val commandKU: CommandKU,
+) : CommandResultShooter by commandKU
 
 /**
  * This is the core broker of this library and it's assumed to be a singleton.
  */
-class MessageKU : CommandRegister, CommandResultRegister,
+class CommandKU : CommandRegister, CommandResultRegister,
   CommandShooter, CommandResultShooter {
 
   private val mutex = Mutex()
@@ -71,8 +71,8 @@ class MessageKU : CommandRegister, CommandResultRegister,
     mutex.withLock { internalRegister(commandClass, key, callback) }
   }
 
-  suspend fun <C : Command> dispose(callback: CommandCallback<C>) {
-    mutex.withLock { internalDispose(callback) }
+  suspend fun <C : Command> cancel(callback: CommandCallback<C>) {
+    mutex.withLock { internalCancel(callback) }
   }
 
   override suspend fun <C : Command> shoot(commandBall: CommandBall<C>): Boolean =
@@ -101,7 +101,7 @@ class MessageKU : CommandRegister, CommandResultRegister,
     store[commandClass] = store[commandClass]?.apply { add(element) } ?: mutableSetOf(element)
   }
 
-  private fun <C : Command> internalDispose(callback: CommandCallback<C>) {
+  private fun <C : Command> internalCancel(callback: CommandCallback<C>) {
     store.values.forEach { set ->
       set.firstOrNull { cmd ->
         when (cmd) {
@@ -134,7 +134,7 @@ class MessageKU : CommandRegister, CommandResultRegister,
     ?.filterIsInstance<ResultCmd<*>>()
     ?.firstOrNull { cmd -> cmd.key == commandBall.key }
     ?.let { cmd ->
-      internalDispose(cmd.callback)
+      internalCancel(cmd.callback)
       cmd.callback as CommandCallback<C>
     }
 }
@@ -151,11 +151,11 @@ private class ResultCmd<C : Command>(
 ) : Cmd()
 
 private class RegistrationImpl<C : Command>(
-  private val disposer: MessageKU,
+  private val cancelHandle: CommandKU,
   private val callback: CommandCallback<C>,
 ) : Registration {
 
-  override suspend fun dispose() {
-    disposer.dispose(callback)
+  override suspend fun cancel() {
+    cancelHandle.cancel(callback)
   }
 }

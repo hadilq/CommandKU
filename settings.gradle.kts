@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-rootProject.name = "messageKU"
+rootProject.name = "CommandKU"
 include(":message-ku-api")
 include(":message-ku-impl")
 include(":sample-app")

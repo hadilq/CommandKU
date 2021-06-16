@@ -13,26 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.hadilq.messageku.impl
+package com.github.hadilq.commandku.impl
 
-import com.github.hadilq.messageku.api.Command
-import com.github.hadilq.messageku.api.CommandBall
-import com.github.hadilq.messageku.api.CommandCallback
-import com.github.hadilq.messageku.api.CommandKey
+import com.github.hadilq.commandku.api.Command
+import com.github.hadilq.commandku.api.CommandBall
+import com.github.hadilq.commandku.api.CommandCallback
+import com.github.hadilq.commandku.api.CommandKey
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-internal class MessageKUTest {
+internal class CommandKUTest {
 
-  private val messageKU = MessageKU()
+  private val commandKU = CommandKU()
 
   @Test
   fun `given_a_callback then_shoot_command`() = runBlocking {
-    val commandRegister = CommandRegisterImpl(messageKU)
-    val commandShooter = CommandShooterImpl(messageKU)
+    val commandRegister = CommandRegisterImpl(commandKU)
+    val commandShooter = CommandShooterImpl(commandKU)
     val commandBall = CommandBall(CommandKey(Random.nextLong()), FakeCommand())
     val callback = FakeCommandCallback<FakeCommand>()
 
@@ -44,13 +44,13 @@ internal class MessageKUTest {
 
   @Test
   fun `given_a_callback_register_dispose then_shoot_command`() = runBlocking {
-    val commandRegister = CommandRegisterImpl(messageKU)
-    val commandShooter = CommandShooterImpl(messageKU)
+    val commandRegister = CommandRegisterImpl(commandKU)
+    val commandShooter = CommandShooterImpl(commandKU)
     val commandBall = CommandBall(CommandKey(123), FakeCommand())
     val callback = FakeCommandCallback<FakeCommand>()
 
     val registration = commandRegister.register(FakeCommand::class, callback)
-    registration.dispose()
+    registration.cancel()
     commandShooter.shoot(commandBall)
 
     assertNull(callback.commandBall)
@@ -58,8 +58,8 @@ internal class MessageKUTest {
 
   @Test
   fun `given_a_callback_register_result then_shoot_command`() = runBlocking {
-    val commandResultRegister = CommandResultRegisterImpl(messageKU)
-    val commandResultShooter = CommandResultShooterImpl(messageKU)
+    val commandResultRegister = CommandResultRegisterImpl(commandKU)
+    val commandResultShooter = CommandResultShooterImpl(commandKU)
     val key = Random.nextLong()
     val commandBall = CommandBall(CommandKey(key), FakeCommand())
     val callback = FakeCommandCallback<FakeCommand>()
@@ -72,8 +72,8 @@ internal class MessageKUTest {
 
   @Test
   fun `given_a_callback_register_result then_shoot_command_twice`() = runBlocking {
-    val commandResultRegister = CommandResultRegisterImpl(messageKU)
-    val commandResultShooter = CommandResultShooterImpl(messageKU)
+    val commandResultRegister = CommandResultRegisterImpl(commandKU)
+    val commandResultShooter = CommandResultShooterImpl(commandKU)
     val key = Random.nextLong()
     val commandBall = CommandBall(CommandKey(key), FakeCommand())
     val callback = FakeCommandCallback<FakeCommand>()
@@ -91,8 +91,8 @@ internal class MessageKUTest {
 
   @Test
   fun `given_a_callback_register_result then_shoot_command_with_different_key`() = runBlocking {
-    val commandResultRegister = CommandResultRegisterImpl(messageKU)
-    val commandResultShooter = CommandResultShooterImpl(messageKU)
+    val commandResultRegister = CommandResultRegisterImpl(commandKU)
+    val commandResultShooter = CommandResultShooterImpl(commandKU)
     val key1 = Random.nextLong()
     val key2 = key1 + 1
     val commandBall = CommandBall(CommandKey(key1), FakeCommand())

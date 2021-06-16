@@ -13,16 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.hadilq.messageku.api
+package com.github.hadilq.commandku.api
 
 /**
- * The implementation by user can provide an event to register callbacks, [CommandCallback], to
- * the broker, [CommandRegister].
+ * Broker for sending request.
  */
-interface CommandHook {
+interface CommandShooter {
 
-  /**
-   * On event this method will be called.
-   */
-  fun hookUp(commandRegister: CommandRegister)
+  suspend fun <C : Command> shoot(commandBall: CommandBall<C>): Boolean
 }

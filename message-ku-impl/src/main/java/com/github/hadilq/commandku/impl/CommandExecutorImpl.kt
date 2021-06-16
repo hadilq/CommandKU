@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.hadilq.messageku.impl
+package com.github.hadilq.commandku.impl
 
-import com.github.hadilq.messageku.api.Available
-import com.github.hadilq.messageku.api.Command
-import com.github.hadilq.messageku.api.CommandBall
-import com.github.hadilq.messageku.api.CommandCallback
-import com.github.hadilq.messageku.api.CommandExecutor
-import com.github.hadilq.messageku.api.CommandKey
-import com.github.hadilq.messageku.api.CommandResult
-import com.github.hadilq.messageku.api.CommandResultRegister
-import com.github.hadilq.messageku.api.CommandShooter
-import com.github.hadilq.messageku.api.NotAvailable
+import com.github.hadilq.commandku.api.Available
+import com.github.hadilq.commandku.api.Command
+import com.github.hadilq.commandku.api.CommandBall
+import com.github.hadilq.commandku.api.CommandCallback
+import com.github.hadilq.commandku.api.CommandExecutor
+import com.github.hadilq.commandku.api.CommandKey
+import com.github.hadilq.commandku.api.CommandResult
+import com.github.hadilq.commandku.api.CommandResultRegister
+import com.github.hadilq.commandku.api.CommandShooter
+import com.github.hadilq.commandku.api.NotAvailable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.coroutines.Continuation

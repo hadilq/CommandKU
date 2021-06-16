@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.hadilq.messageku.impl
+package com.github.hadilq.commandku.impl
 
-import com.github.hadilq.messageku.api.Available
-import com.github.hadilq.messageku.api.Command
-import com.github.hadilq.messageku.api.CommandCallbackImpl
-import com.github.hadilq.messageku.api.CommandResult
-import com.github.hadilq.messageku.api.NotAvailable
-import com.github.hadilq.messageku.api.exe
+import com.github.hadilq.commandku.api.Available
+import com.github.hadilq.commandku.api.Command
+import com.github.hadilq.commandku.api.CommandCallbackImpl
+import com.github.hadilq.commandku.api.CommandResult
+import com.github.hadilq.commandku.api.NotAvailable
+import com.github.hadilq.commandku.api.exe
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -28,14 +28,14 @@ import kotlin.test.assertTrue
 
 internal class CommandExecutorImplTest {
 
-  private val messageKU = MessageKU()
+  private val commandKU = CommandKU()
 
   @Test
   fun `given_a_command then_available_result_command`() = runBlocking {
-    val commandRegister = CommandRegisterImpl(messageKU)
-    val commandShooter = CommandShooterImpl(messageKU)
-    val commandResultShooter = CommandResultShooterImpl(messageKU)
-    val commandResultRegister = CommandResultRegisterImpl(messageKU)
+    val commandRegister = CommandRegisterImpl(commandKU)
+    val commandShooter = CommandShooterImpl(commandKU)
+    val commandResultShooter = CommandResultShooterImpl(commandKU)
+    val commandResultRegister = CommandResultRegisterImpl(commandKU)
     val executor = CommandExecutorImpl(commandShooter, commandResultRegister)
     val expectedResult = FakeResultCommand()
     commandRegister.register(
@@ -53,8 +53,8 @@ internal class CommandExecutorImplTest {
 
   @Test
   fun `given_a_command then_not_available_result_command`() = runBlocking {
-    val commandShooter = CommandShooterImpl(messageKU)
-    val commandResultRegister = CommandResultRegisterImpl(messageKU)
+    val commandShooter = CommandShooterImpl(commandKU)
+    val commandResultRegister = CommandResultRegisterImpl(commandKU)
     val executor = CommandExecutorImpl(commandShooter, commandResultRegister)
 
     val result: CommandResult<FakeResultCommand> = executor.exe(FakeCommand())
