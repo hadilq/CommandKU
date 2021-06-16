@@ -40,8 +40,8 @@ internal class CommandExecutorImplTest {
     val expectedResult = FakeResultCommand()
     commandRegister.register(
       FakeCommand::class,
-      CommandCallbackImpl(commandResultShooter, FakeResultCommand::class) {
-        Available(expectedResult)
+      CommandCallbackImpl(commandResultShooter) {
+        expectedResult
       })
 
     val result: CommandResult<FakeResultCommand> = executor.exe(FakeCommand())

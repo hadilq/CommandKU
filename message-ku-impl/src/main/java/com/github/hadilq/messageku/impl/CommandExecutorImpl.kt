@@ -15,13 +15,13 @@
  */
 package com.github.hadilq.messageku.impl
 
+import com.github.hadilq.messageku.api.Available
 import com.github.hadilq.messageku.api.Command
 import com.github.hadilq.messageku.api.CommandBall
+import com.github.hadilq.messageku.api.CommandCallback
 import com.github.hadilq.messageku.api.CommandExecutor
 import com.github.hadilq.messageku.api.CommandKey
 import com.github.hadilq.messageku.api.CommandResult
-import com.github.hadilq.messageku.api.CommandResultBall
-import com.github.hadilq.messageku.api.CommandResultCallback
 import com.github.hadilq.messageku.api.CommandResultRegister
 import com.github.hadilq.messageku.api.CommandShooter
 import com.github.hadilq.messageku.api.NotAvailable
@@ -60,9 +60,9 @@ class CommandExecutorImpl constructor(
 
 private class CommandCallbackImpl<C : Command>(
   private val con: Continuation<CommandResult<C>>,
-) : CommandResultCallback<C> {
+) : CommandCallback<C> {
 
-  override suspend fun invoke(commandBall: CommandResultBall<C>) {
-    con.resume(commandBall.command)
+  override suspend fun invoke(commandBall: CommandBall<C>) {
+    con.resume(Available(commandBall.command))
   }
 }

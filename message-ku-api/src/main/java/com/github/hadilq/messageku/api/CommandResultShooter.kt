@@ -22,7 +22,7 @@ interface CommandResultShooter {
 
   /**
    * Send back the result to its broker, [CommandResultShooter]. Notice, the
-   * [CommandResultBall.key] must be match to the request key, [CommandBall.key].
+   * result key, [CommandBall.key], must be match to the request key, [CommandBall.key].
    */
-  suspend fun <C : Command> shoot(commandBall: CommandResultBall<C>)
+  suspend fun <C : Command> shootResult(commandBall: CommandBall<C>)
 }

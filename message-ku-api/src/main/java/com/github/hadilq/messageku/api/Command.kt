@@ -66,33 +66,8 @@ class CommandBall<C : Command>(
 }
 
 /**
- * Keep the result [command] next to its [key].
- */
-class CommandResultBall<C : Command>(
-  val key: CommandKey,
-  val command: CommandResult<C>,
-  val commandClass: KClass<C>
-) {
-
-  companion object {
-
-    inline operator fun <reified C : Command> invoke(
-      key: CommandKey,
-      command: C,
-    ) = CommandResultBall(key, Available(command), C::class)
-  }
-}
-
-/**
- * Callback to receive the requests.
+ * Callback to receive the requests and results.
  */
 interface CommandCallback<C : Command> {
   suspend fun invoke(commandBall: CommandBall<C>)
-}
-
-/**
- * Callback to receive the result. After receiving one result, it will be disposed.
- */
-interface CommandResultCallback<C : Command> {
-  suspend fun invoke(commandBall: CommandResultBall<C>)
 }

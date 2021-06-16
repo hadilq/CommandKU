@@ -6,6 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import com.github.hadilq.messageku.api.Available
 import com.github.hadilq.messageku.api.Command
 import com.github.hadilq.messageku.api.CommandCallbackImpl
+import com.github.hadilq.messageku.api.CommandExecutor
 import com.github.hadilq.messageku.api.CommandHook
 import com.github.hadilq.messageku.api.CommandRegister
 import com.github.hadilq.messageku.api.CommandResult
@@ -22,13 +23,17 @@ class MainActivity : AppCompatActivity() {
     CH(broker).hookUp(broker)
 
     val executor = CommandExecutorImpl(broker, broker)
+
+    suspend fun CommandExecutor.runCommand(request: RequestCommand): CommandResult<ResultCommand> =
+      exe(request)
+
     lifecycleScope.launchWhenResumed {
-      when (val result: CommandResult<ResultCommand> =
-        executor.exe(RequestCommand("Are you there?"))) {
+      when (val result = executor.runCommand(RequestCommand("Are you there?"))) {
         is Available<*> -> assert(result.command == ResultCommand("Yes! Of course!"))
       }
     }
   }
+
 }
 
 data class RequestCommand(val request: String) : Command
@@ -40,8 +45,8 @@ class CH(
 
   override fun hookUp(commandRegister: CommandRegister) {
     commandRegister.register(RequestCommand::class,
-      CommandCallbackImpl(commandShooter, ResultCommand::class) {
-        Available(ResultCommand("Yes! Of course!"))
+      CommandCallbackImpl(commandShooter) {
+        ResultCommand("Yes! Of course!")
       })
   }
 }

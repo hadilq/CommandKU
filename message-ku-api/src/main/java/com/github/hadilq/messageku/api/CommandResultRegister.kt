@@ -27,8 +27,8 @@ interface CommandResultRegister {
    * result, [callback] will be disposed.
    */
   fun <C : Command> register(
-      commandClass: KClass<C>,
-      key: CommandKey,
-      callback: CommandResultCallback<C>,
+    commandClass: KClass<C>,
+    key: CommandKey,
+    callback: CommandCallback<C>,
   )
 }

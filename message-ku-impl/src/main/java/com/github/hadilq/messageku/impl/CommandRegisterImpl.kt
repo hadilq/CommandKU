@@ -20,8 +20,6 @@ import com.github.hadilq.messageku.api.CommandBall
 import com.github.hadilq.messageku.api.CommandCallback
 import com.github.hadilq.messageku.api.CommandKey
 import com.github.hadilq.messageku.api.CommandRegister
-import com.github.hadilq.messageku.api.CommandResultBall
-import com.github.hadilq.messageku.api.CommandResultCallback
 import com.github.hadilq.messageku.api.CommandResultRegister
 import com.github.hadilq.messageku.api.CommandResultShooter
 import com.github.hadilq.messageku.api.CommandShooter
@@ -68,7 +66,7 @@ class MessageKU : CommandRegister, CommandResultRegister,
   override fun <C : Command> register(
     commandClass: KClass<C>,
     key: CommandKey,
-    callback: CommandResultCallback<C>
+    callback: CommandCallback<C>
   ) = runBlocking {
     mutex.withLock { internalRegister(commandClass, key, callback) }
   }
@@ -81,8 +79,8 @@ class MessageKU : CommandRegister, CommandResultRegister,
     mutex.withLock { internalShoot(commandBall) }
       ?.run { invoke(commandBall); true } ?: false
 
-  override suspend fun <C : Command> shoot(commandBall: CommandResultBall<C>) {
-    mutex.withLock { internalShoot(commandBall) }?.apply { invoke(commandBall) }
+  override suspend fun <C : Command> shootResult(commandBall: CommandBall<C>) {
+    mutex.withLock { internalShootResult(commandBall) }?.apply { invoke(commandBall) }
   }
 
   private fun <C : Command> internalRegister(
@@ -97,7 +95,7 @@ class MessageKU : CommandRegister, CommandResultRegister,
   private fun <C : Command> internalRegister(
     commandClass: KClass<C>,
     key: CommandKey,
-    callback: CommandResultCallback<C>
+    callback: CommandCallback<C>
   ) {
     val element = ResultCmd(key, callback)
     store[commandClass] = store[commandClass]?.apply { add(element) } ?: mutableSetOf(element)
@@ -110,23 +108,9 @@ class MessageKU : CommandRegister, CommandResultRegister,
           is RequestCmd<*> -> {
             cmd.callback === callback
           }
-          else -> false
-        }
-      }?.also {
-        set.remove(it)
-        return
-      }
-    }
-  }
-
-  private fun <C : Command> internalDisposeResult(callback: CommandResultCallback<C>) {
-    store.values.forEach { set ->
-      set.firstOrNull { cmd ->
-        when (cmd) {
           is ResultCmd<*> -> {
             cmd.callback === callback
           }
-          else -> false
         }
       }?.also {
         set.remove(it)
@@ -144,14 +128,14 @@ class MessageKU : CommandRegister, CommandResultRegister,
     ?.let { cmd -> (cmd.callback as CommandCallback<C>) }
 
   @Suppress("UNCHECKED_CAST")
-  private fun <C : Command> internalShoot(
-    commandBall: CommandResultBall<C>,
-  ): CommandResultCallback<C>? = store[commandBall.commandClass]?.asSequence()
+  private fun <C : Command> internalShootResult(
+    commandBall: CommandBall<C>,
+  ): CommandCallback<C>? = store[commandBall.commandClass]?.asSequence()
     ?.filterIsInstance<ResultCmd<*>>()
     ?.firstOrNull { cmd -> cmd.key == commandBall.key }
     ?.let { cmd ->
-      internalDisposeResult(cmd.callback)
-      cmd.callback as CommandResultCallback<C>
+      internalDispose(cmd.callback)
+      cmd.callback as CommandCallback<C>
     }
 }
 
@@ -163,7 +147,7 @@ private class RequestCmd<C : Command>(
 
 private class ResultCmd<C : Command>(
   val key: CommandKey,
-  val callback: CommandResultCallback<C>,
+  val callback: CommandCallback<C>,
 ) : Cmd()
 
 private class RegistrationImpl<C : Command>(

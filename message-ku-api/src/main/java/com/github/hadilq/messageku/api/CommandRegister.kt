@@ -26,8 +26,8 @@ interface CommandRegister {
    * Register [callback] to receive requests.
    */
   fun <C : Command> register(
-      commandClass: KClass<C>,
-      callback: CommandCallback<C>,
+    commandClass: KClass<C>,
+    callback: CommandCallback<C>,
   ): Registration
 }
 
@@ -43,22 +43,30 @@ interface Registration {
 }
 
 /**
- * A handy implementation for [CommandCallback]. It can take care of [CommandBall.key] to be
- * match with [CommandResultBall.key].
+ * A handy implementation for [CommandCallback]. It can take care of request key,
+ * [CommandBall.key], to be match with result key, [CommandBall.key].
  */
 class CommandCallbackImpl<IN : Command, OUT : Command>(
-    private val commandShooter: CommandResultShooter,
-    private val commandResultClass: KClass<OUT>,
-    private val result: suspend (IN) -> CommandResult<OUT>,
+  private val commandShooter: CommandResultShooter,
+  private val commandResultClass: KClass<OUT>,
+  private val result: suspend (IN) -> OUT,
 ) : CommandCallback<IN> {
 
   override suspend fun invoke(commandBall: CommandBall<IN>) {
-    commandShooter.shoot(
-      CommandResultBall(
+    commandShooter.shootResult(
+      CommandBall(
         commandBall.key,
         result(commandBall.command),
         commandResultClass
       )
     )
+  }
+
+  companion object {
+
+    inline operator fun <IN : Command, reified OUT : Command> invoke(
+      commandShooter: CommandResultShooter,
+      noinline result: suspend (IN) -> OUT,
+    ) = CommandCallbackImpl(commandShooter, OUT::class, result)
   }
 }

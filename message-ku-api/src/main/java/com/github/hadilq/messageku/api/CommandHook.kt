@@ -16,7 +16,8 @@
 package com.github.hadilq.messageku.api
 
 /**
- * Provide an event to register callbacks, [CommandCallback], to the broker, [CommandRegister].
+ * The implementation by user can provide an event to register callbacks, [CommandCallback], to
+ * the broker, [CommandRegister].
  */
 interface CommandHook {
 
