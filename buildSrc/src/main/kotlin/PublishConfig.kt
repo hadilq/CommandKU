@@ -17,13 +17,17 @@ const val SNAPSHOT = "-SNAPSHOT"
 
 fun isSnapshot(version: String): Boolean = version.endsWith(SNAPSHOT)
 
+private val artifactsVersion by lazy {
+  "${Versions.libVersion}.${System.currentTimeMillis()}$SNAPSHOT"
+}
+
 fun Project.setupPublication() {
   plugins.apply("org.jetbrains.dokka")
   plugins.apply("maven-publish")
   plugins.apply(SigningPlugin::class.java)
 
   group = Versions.groupId
-  version = "${Versions.libVersion}.${System.currentTimeMillis()}$SNAPSHOT"
+  version = artifactsVersion
 
   val userId = "hadilq"
   val userName = "Hadi Lashkari Ghouchani"
