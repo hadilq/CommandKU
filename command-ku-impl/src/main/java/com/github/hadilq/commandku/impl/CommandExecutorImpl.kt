@@ -21,7 +21,7 @@ import com.github.hadilq.commandku.api.CommandBall
 import com.github.hadilq.commandku.api.CommandCallback
 import com.github.hadilq.commandku.api.CommandExecutor
 import com.github.hadilq.commandku.api.CommandKey
-import com.github.hadilq.commandku.api.CommandResult
+import com.github.hadilq.commandku.api.CommandResponse
 import com.github.hadilq.commandku.api.CommandResultRegister
 import com.github.hadilq.commandku.api.CommandShooter
 import com.github.hadilq.commandku.api.NotAvailable
@@ -45,7 +45,7 @@ class CommandExecutorImpl constructor(
     input: IN,
     inputClass: KClass<IN>,
     expectedOut: KClass<OUT>,
-  ): CommandResult<OUT> = suspendCoroutine { con: Continuation<CommandResult<OUT>> ->
+  ): CommandResponse<OUT> = suspendCoroutine { con: Continuation<CommandResponse<OUT>> ->
     val newCommandKey = getNewCommandKey()
     commandResultRegister.register(expectedOut, newCommandKey, CommandCallbackImpl(con))
     CoroutineScope(con.context).launch {
@@ -59,7 +59,7 @@ class CommandExecutorImpl constructor(
 }
 
 private class CommandCallbackImpl<C : Command>(
-  private val con: Continuation<CommandResult<C>>,
+  private val con: Continuation<CommandResponse<C>>,
 ) : CommandCallback<C> {
 
   override suspend fun invoke(commandBall: CommandBall<C>) {

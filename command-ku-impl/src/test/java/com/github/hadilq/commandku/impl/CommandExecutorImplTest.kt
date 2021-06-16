@@ -18,7 +18,7 @@ package com.github.hadilq.commandku.impl
 import com.github.hadilq.commandku.api.Available
 import com.github.hadilq.commandku.api.Command
 import com.github.hadilq.commandku.api.CommandCallbackImpl
-import com.github.hadilq.commandku.api.CommandResult
+import com.github.hadilq.commandku.api.CommandResponse
 import com.github.hadilq.commandku.api.NotAvailable
 import com.github.hadilq.commandku.api.exe
 import kotlinx.coroutines.runBlocking
@@ -44,10 +44,10 @@ internal class CommandExecutorImplTest {
         expectedResult
       })
 
-    val result: CommandResult<FakeResultCommand> = executor.exe(FakeCommand())
+    val response: CommandResponse<FakeResultCommand> = executor.exe(FakeCommand())
 
-    assertTrue(result is Available<*>)
-    val command = (result as Available<FakeResultCommand>).command
+    assertTrue(response is Available<*>)
+    val command = (response as Available<FakeResultCommand>).command
     assertEquals(expectedResult, command)
   }
 
@@ -57,9 +57,9 @@ internal class CommandExecutorImplTest {
     val commandResultRegister = CommandResultRegisterImpl(commandKU)
     val executor = CommandExecutorImpl(commandShooter, commandResultRegister)
 
-    val result: CommandResult<FakeResultCommand> = executor.exe(FakeCommand())
+    val response: CommandResponse<FakeResultCommand> = executor.exe(FakeCommand())
 
-    assertTrue(result is NotAvailable<*>)
+    assertTrue(response is NotAvailable<*>)
   }
 
   class FakeCommand : Command

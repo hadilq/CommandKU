@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 object Modules {
-    const val api = ":message-ku-api"
-    const val impl = ":message-ku-impl"
+    const val api = ":command-ku-api"
+    const val impl = ":command-ku-impl"
 }

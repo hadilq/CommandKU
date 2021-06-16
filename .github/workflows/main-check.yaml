@@ -27,4 +27,4 @@ jobs:
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-        run: ./gradlew :message-ku-api:publish :message-ku-impl:publish
+        run: ./gradlew :command-ku-api:publish :command-ku-impl:publish

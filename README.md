@@ -1,5 +1,5 @@
-![Health Check](https://github.com/hadilq/message-ku/workflows/Health%20Check/badge.svg?branch=main)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.hadilq/message-ku-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.hadilq/message-ku-api)
+![Health Check](https://github.com/hadilq/CommandKU/workflows/Health%20Check/badge.svg?branch=main)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.hadilq/command-ku-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.hadilq/command-ku-api)
 
 # CommandKU
 
@@ -58,10 +58,10 @@ whenever is needed we can dispose the `registration`.
 
 Download via gradle
 ```groovy
-implementation "com.github.hadilq:message-ku-api:$libVersion"
-implementation "com.github.hadilq:message-ku-impl:$libVersion"
+implementation "com.github.hadilq:command-ku-api:$libVersion"
+implementation "com.github.hadilq:command-ku-impl:$libVersion"
 ```
-where you can find the `libVersion` in the [Releases](https://github.com/hadilq/message-ku/releases) page of this repository.
+where you can find the `libVersion` in the [Releases](https://github.com/hadilq/CommandKU/releases) page of this repository.
 
 Snapshots of the development version are available in [Sonatype's snapshots repository](https://oss.sonatype.org/content/repositories/snapshots).
 

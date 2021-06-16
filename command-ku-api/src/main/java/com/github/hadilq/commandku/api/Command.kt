@@ -27,17 +27,17 @@ interface Command
  * A wrapper for [Command], which is useful while trying to request and the no callback
  * registered to receive it.
  */
-sealed class CommandResult<C : Command>
+sealed class CommandResponse<C : Command>
 
 /**
  * A callback is available/registered and the result command is [command].
  */
-class Available<C : Command>(val command: C) : CommandResult<C>()
+class Available<C : Command>(val command: C) : CommandResponse<C>()
 
 /**
  * No callback is available/registered.
  */
-class NotAvailable<C : Command> : CommandResult<C>()
+class NotAvailable<C : Command> : CommandResponse<C>()
 
 /**
  * They key to match up requests and results.

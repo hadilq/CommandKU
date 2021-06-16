@@ -7,7 +7,7 @@ import com.github.hadilq.commandku.api.Available
 import com.github.hadilq.commandku.api.Command
 import com.github.hadilq.commandku.api.CommandCallbackImpl
 import com.github.hadilq.commandku.api.CommandExecutor
-import com.github.hadilq.commandku.api.CommandResult
+import com.github.hadilq.commandku.api.CommandResponse
 import com.github.hadilq.commandku.api.Registration
 import com.github.hadilq.commandku.api.exe
 import com.github.hadilq.commandku.impl.CommandExecutorImpl
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     val executor = CommandExecutorImpl(broker, broker)
 
-    suspend fun CommandExecutor.runCommand(request: String): CommandResult<ResultCommand> =
+    suspend fun CommandExecutor.runCommand(request: String): CommandResponse<ResultCommand> =
       exe(RequestCommand(request))
 
     lifecycleScope.launchWhenResumed {

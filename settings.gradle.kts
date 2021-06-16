@@ -15,6 +15,6 @@
  */
 
 rootProject.name = "CommandKU"
-include(":message-ku-api")
-include(":message-ku-impl")
+include(":command-ku-api")
+include(":command-ku-impl")
 include(":sample-app")

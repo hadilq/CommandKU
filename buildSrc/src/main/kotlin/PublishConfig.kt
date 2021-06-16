@@ -32,8 +32,8 @@ fun Project.setupPublication() {
   val userId = "hadilq"
   val userName = "Hadi Lashkari Ghouchani"
   val userEmail = "hadilq.dev@gmail.com"
-  val githubUrl = "https://github.com/hadilq/message-ku"
-  val githubScmUrl = "scm:git@github.com:hadilq/message-ku.git"
+  val githubUrl = "https://github.com/hadilq/CommandKU"
+  val githubScmUrl = "scm:git@github.com:hadilq/CommandKU.git"
 
   val ossrhUsername: String? = System.getenv()["OSSRH_USERNAME"]
     ?: findProperty("ossrhUsername") as String?
