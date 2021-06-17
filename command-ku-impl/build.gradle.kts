@@ -14,33 +14,33 @@
  * limitations under the License.
  */
 plugins {
-    kotlin("jvm")
+  kotlin("jvm")
 }
 
 setupPublication()
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = "${JavaVersion.VERSION_1_8}"
-    }
+  kotlinOptions {
+    jvmTarget = "${JavaVersion.VERSION_1_8}"
+  }
 }
 
 tasks.test {
-    useJUnitPlatform()
+  useJUnitPlatform()
 }
 
 dependencies {
-    implementation(project(Modules.api))
+  implementation(project(Modules.api))
 
-    implementation(Depends.kotlinStdLib)
-    implementation(Depends.coroutines)
+  implementation(Depends.kotlinStdLib)
+  implementation(Depends.coroutines)
 
-    testImplementation(Depends.kotlinTest)
-    testImplementation(Depends.junitJupiterApi)
-    testRuntimeOnly(Depends.junitJupiterEngine)
+  testImplementation(Depends.kotlinTest)
+  testImplementation(Depends.junitJupiterApi)
+  testRuntimeOnly(Depends.junitJupiterEngine)
 }

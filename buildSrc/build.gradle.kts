@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 plugins {
-    `kotlin-dsl`
+  `kotlin-dsl`
 }
 
 repositories {
-    google()
-    mavenCentral()
+  google()
+  mavenCentral()
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle:4.1.3") // Change it in build.gradle.kts too
+  implementation("com.android.tools.build:gradle:4.1.3") // Change it in build.gradle.kts too
 }

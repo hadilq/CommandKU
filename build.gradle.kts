@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:4.1.3") // Change it in buildSrc too
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32")
-        classpath("org.jetbrains.dokka:dokka-gradle-plugin:${Versions.dokka}")
-        classpath("de.mannodermaus.gradle.plugins:android-junit5:1.7.1.1")
-    }
+  repositories {
+    google()
+    mavenCentral()
+  }
+  dependencies {
+    classpath("com.android.tools.build:gradle:4.1.3") // Change it in buildSrc too
+    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32")
+    classpath("org.jetbrains.dokka:dokka-gradle-plugin:${Versions.dokka}")
+    classpath("de.mannodermaus.gradle.plugins:android-junit5:1.7.1.1")
+  }
 }
 
 allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
+  repositories {
+    google()
+    mavenCentral()
+  }
 }
 
 tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
+  delete(rootProject.buildDir)
 }
