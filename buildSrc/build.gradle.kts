@@ -23,5 +23,5 @@ repositories {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle:7.0.0-beta03") // Change it in build.gradle.kts too
+    implementation("com.android.tools.build:gradle:4.1.3") // Change it in build.gradle.kts too
 }

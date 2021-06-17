@@ -55,7 +55,7 @@ class CommandExecutorImpl constructor(
     }
   }
 
-  private fun getNewCommandKey(): CommandKey = CommandKey(random.nextLong())
+  private fun getNewCommandKey(): CommandKey = random.nextLong()
 }
 
 private class CommandCallbackImpl<C : Command>(

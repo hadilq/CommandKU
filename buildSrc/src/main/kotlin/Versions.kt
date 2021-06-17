@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 object Versions {
-    const val kotlin = "1.5.10"
+    const val kotlin = "1.4.32"
     const val dokka = "1.4.32"
 
     const val groupId = "com.github.hadilq"

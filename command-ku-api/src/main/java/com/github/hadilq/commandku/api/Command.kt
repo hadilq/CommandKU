@@ -42,10 +42,7 @@ class NotAvailable<C : Command> : CommandResponse<C>()
 /**
  * They key to match up requests and results.
  */
-@JvmInline
-value class CommandKey(
-  val key: Long,
-)
+typealias CommandKey = Long
 
 /**
  * Keep the request [command] next to its [key].
