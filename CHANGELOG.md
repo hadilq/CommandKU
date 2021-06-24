@@ -6,7 +6,7 @@ Changelog
 
 _2021-06-23_
 
- - Make the cancelation an ordinary method, instead of a suspend function.
+ - Make the cancellation an ordinary method, instead of a suspend function.
 
 0.0.1
 ----
