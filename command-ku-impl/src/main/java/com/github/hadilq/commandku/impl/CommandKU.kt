@@ -71,7 +71,7 @@ class CommandKU : CommandRegister, CommandResultRegister,
     mutex.withLock { internalRegister(commandClass, key, callback) }
   }
 
-  suspend fun <C : Command> cancel(callback: CommandCallback<C>) {
+  fun <C : Command> cancel(callback: CommandCallback<C>) = runBlocking {
     mutex.withLock { internalCancel(callback) }
   }
 
@@ -155,7 +155,7 @@ private class RegistrationImpl<C : Command>(
   private val callback: CommandCallback<C>,
 ) : Registration {
 
-  override suspend fun cancel() {
+  override fun cancel() {
     cancelHandle.cancel(callback)
   }
 }

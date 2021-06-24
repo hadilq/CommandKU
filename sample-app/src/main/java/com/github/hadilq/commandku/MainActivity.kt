@@ -12,7 +12,6 @@ import com.github.hadilq.commandku.api.Registration
 import com.github.hadilq.commandku.api.exe
 import com.github.hadilq.commandku.impl.CommandExecutorImpl
 import com.github.hadilq.commandku.impl.CommandKU
-import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,9 +41,7 @@ class MainActivity : AppCompatActivity() {
 
   override fun onDestroy() {
     super.onDestroy()
-    runBlocking {
-      registration?.cancel()
-    }
+    registration?.cancel()
   }
 }
 

@@ -39,7 +39,7 @@ interface Registration {
   /**
    * Dispose the registration contract.
    */
-  suspend fun cancel()
+  fun cancel()
 }
 
 /**
