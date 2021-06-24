@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.1.0
+----
+
+_2021-06-23_
+
+ - Make the cancelation an ordinary method, instead of a suspend function.
+
 0.0.1
 ----
 
